@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
+import { Button } from '@headlessui/react'
+
 
 export default function Home() {
 	const handleClick = () => {
-		// send json to https://neo4j-backend-three.vercel.app/api/addUser
 		fetch("https://neo4j-backend-three.vercel.app/api/addUser", {
 			method: "POST",
 			headers: {
@@ -12,16 +13,44 @@ export default function Home() {
 			body: JSON.stringify({
 				message: "This is a test note",
 			}),
-		})
+		}).then((response) => {
+			if (response.ok) {
+				alert("Note added successfully!");
+			} else {
+				alert("Failed to add note");
+			}
+		}).catch((error) => {
+			alert("Failed to add note");
+		});
 	}
+
 	return (
 		<div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-				<div className="flex flex-cols-2 items-center gap-4">
+			<header className="hidden items-center justify-between row-start-1 w-full sm:flex">
+				<div className="flex items-center gap-4">
 					<Image
 						className="dark:invert"
 						src="/assets/logo.png"
-						alt="Next.js logo"
+						alt="Note.lat logo"
+						width={32}
+						height={32}
+						priority
+					/>
+					<h1 className="text-xl font-semibold">Note.lat</h1>
+					<span>Lecture note has never been so easy</span>
+				</div>
+				<nav>
+					<Button className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
+						Create Now
+					</Button>
+				</nav>
+			</header>
+			<main className="grid gap-8 row-start-2 items-center sm:items-start">
+				<div className="flex flex-cols-2 items-center justify-center gap-4 md:justify-start">
+					<Image
+						className="dark:invert sm:hidden"
+						src="/assets/logo.png"
+						alt="Note.lat logo"
 						width={64}
 						height={64}
 						priority
@@ -30,13 +59,14 @@ export default function Home() {
 				</div>
 				<ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
 					<li className="mb-2">
-						Get started by editing{" "}
+						Get started by recoding a{" "}
 						<code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-							src/app/page.tsx
+							Lecture
 						</code>
 						.
 					</li>
-					<li>Save and see your changes instantly.</li>
+					<li><i className="text-lg">☕</i> Sit back and relax.</li>
+					<li><i className="text-lg">🎉</i> Tada! All your course note is here.</li>
 				</ol>
 
 				<div className="flex gap-4 items-center flex-col sm:flex-row">
