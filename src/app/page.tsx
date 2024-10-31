@@ -14,13 +14,9 @@ export default function Home() {
 				message: "This is a test note",
 			}),
 		}).then((response) => {
-			if (response.ok) {
-				alert("Note added successfully!");
-			} else {
-				alert("Failed to add note");
-			}
+			console.log(response);
 		}).catch((error) => {
-			alert("Failed to add note");
+			console.error(error);
 		});
 	}
 
