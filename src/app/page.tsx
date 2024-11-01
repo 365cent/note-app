@@ -59,7 +59,7 @@ Transcript:`
     };
     
 
-    const handleNoteChange = (event) => {
+    const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNoteData(event.target.value);
     };
 
