@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from '@headlessui/react'
+import { Textarea } from '@headlessui/react'
 
 
 export default function Home() {
@@ -36,9 +38,11 @@ export default function Home() {
 					<span className="hidden sm:block">Lecture note has never been so easy</span>
 				</div>
 				<nav>
+					<Link href="/login">
 					<Button className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
 						Create Now
 					</Button>
+					</Link>
 				</nav>
 			</header>
 			<main className="grid gap-8 row-start-2 items-center sm:items-start">
@@ -88,6 +92,16 @@ export default function Home() {
 						Read our docs
 					</a>
 				</div>
+
+
+          <Textarea
+          className="mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+            // className={clsx(
+            //   'mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black',
+            //   'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
+            // )}
+            rows={3}
+          />
 			</main>
 			<footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
 				<a
