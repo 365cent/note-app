@@ -40,9 +40,6 @@ export default function Example() {
         </Field>
         <Field>
           <Label className="text-sm/6 font-medium text-black">Delivery notes</Label>
-          <Description className="text-sm/6 text-black/50">
-            If you have a tiger, we'd like to know about it.
-          </Description>
           <Textarea
           className="mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
             // className={clsx(
