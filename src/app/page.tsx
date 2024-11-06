@@ -27,6 +27,10 @@ Transcript:`
         }
     }, [noteData]);
 
+    const onNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setNoteData(event.target.value);
+    };
+
     const handleClick = () => {
         fetch("https://neo4j-backend-three.vercel.app/api/addUser", {
             method: "POST",
@@ -94,36 +98,6 @@ Transcript:`
         }).catch((error) => {
             console.error("Fetch error:", error);
         });
-    };
-
-    // .then((data) => {
-    //     // Now, set up EventSource to listen to the streaming endpoint
-    //     const source = new EventSource("https://broad-frost-94f8.volume.workers.dev/");
-
-    //     source.onmessage = (event) => {
-    //         if (event.data === "[DONE]") {
-    //             source.close();
-    //             return;
-    //         }
-
-    //         const streamData = JSON.parse(event.data);
-    //         console.log(streamData);
-    //         setNoteData((prevData) => prevData + streamData.response);
-    //     };
-
-    //     source.onerror = (error) => {
-    //         console.error("EventSource error:", error);
-    //         source.close();
-    //     };
-    // })
-    // .catch((error) => {
-    //     console.error("Fetch error:", error);
-    // });
-
-
-
-    const onNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setNoteData(event.target.value);
     };
 
     return (
