@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from '@headlessui/react'
@@ -8,7 +8,8 @@ import { Textarea } from '@headlessui/react'
 
 
 export default function Home() {
-    const [noteData, setNoteData] = useState('');
+    const [noteData, setNoteData] = useState<string>("");
+    const noteText = useRef<HTMLTextAreaElement>(null);
     const prompt = `Create detailed, comprehensive study notes from the following transcript. Ensure that the notes include:
 1. Key points and summaries of each main topic covered.
 2. Definitions of any technical terms, with examples when relevant.
@@ -19,6 +20,12 @@ export default function Home() {
 Format the notes in bullet points or numbered lists where helpful for clarity, and include headers for each topic and subtopic for easy navigation.
 
 Transcript:`
+
+    useEffect(() => {
+        if (noteText.current) {
+            noteText.current.scrollTop = noteText.current.scrollHeight;
+        }
+    }, [noteData]);
 
     const handleClick = () => {
         fetch("https://neo4j-backend-three.vercel.app/api/addUser", {
@@ -37,8 +44,9 @@ Transcript:`
     }
 
     const handleSum = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault(); // Prevents page reload
-        
+        event.preventDefault();
+
+        // Initial POST request to start processing
         fetch("https://broad-frost-94f8.volume.workers.dev/", {
             method: "POST",
             headers: {
@@ -47,19 +55,74 @@ Transcript:`
             body: JSON.stringify({
                 message: prompt.concat(noteData),
             }),
-        })
-        .then((response) => response.json()) // Parse JSON and return it for the next .then
-        .then((data) => data[0].response.response)
-        .then((summary) => {
-            setNoteData(summary);
-        })
-        .catch((error) => {
-            console.error(error);
+        }).then((response) => {
+            const reader = response.body?.getReader();
+            if (!reader) {
+                return;
+            }
+
+            const decoder = new TextDecoder();
+            let buffer = "";
+            setNoteData("");
+
+            reader.read().then(function processText({ done, value }): Promise<void> {
+                if (done) {
+                    console.log("Stream complete");
+                    return Promise.resolve();
+                }
+
+                buffer += decoder.decode(value, { stream: true });
+                const parts = buffer.split("\n");
+                buffer = parts.pop() || "";  // Save any incomplete data for the next chunk
+
+                for (const part of parts) {
+                    if (part.startsWith("data: ")) {
+                        const body = part.slice(6);
+                        if (body === "[DONE]") {
+                            // end of message
+                            console.log("Stream complete");
+                            break;
+                        }
+                        const json = JSON.parse(body); // Parse the JSON data after "data: "
+                        console.log(json.response);
+                        setNoteData((prevData) => prevData + json.response); // Update DOM with each message
+                    }
+                }
+
+                return reader.read().then(processText);
+            });
+        }).catch((error) => {
+            console.error("Fetch error:", error);
         });
     };
-    
 
-    const handleNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    // .then((data) => {
+    //     // Now, set up EventSource to listen to the streaming endpoint
+    //     const source = new EventSource("https://broad-frost-94f8.volume.workers.dev/");
+
+    //     source.onmessage = (event) => {
+    //         if (event.data === "[DONE]") {
+    //             source.close();
+    //             return;
+    //         }
+
+    //         const streamData = JSON.parse(event.data);
+    //         console.log(streamData);
+    //         setNoteData((prevData) => prevData + streamData.response);
+    //     };
+
+    //     source.onerror = (error) => {
+    //         console.error("EventSource error:", error);
+    //         source.close();
+    //     };
+    // })
+    // .catch((error) => {
+    //     console.error("Fetch error:", error);
+    // });
+
+
+
+    const onNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNoteData(event.target.value);
     };
 
@@ -136,10 +199,11 @@ Transcript:`
                 <section className="grid py-48" id="demo">
                     <h2 className="text-3xl font-semibold">Demo</h2>
                     <form className="grid gap-2"
-                    onSubmit={handleSum}>
+                        onSubmit={handleSum}>
                         <Textarea className="mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+                            ref={noteText}
                             value={noteData}
-                            onChange={handleNoteChange}
+                            onChange={onNoteChange}
                             rows={6} />
                         <div className="grid">
                             <Button className="ml-auto inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
