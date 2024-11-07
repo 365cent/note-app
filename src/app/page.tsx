@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
+import Header from "@/app/components/header"
 import { Button } from '@headlessui/react'
-import { Textarea } from '@headlessui/react'
-
+import { Field, Description, Textarea } from '@headlessui/react'
 
 
 export default function Home() {
@@ -102,27 +102,7 @@ Transcript:`
 
     return (
         <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <header className="flex items-center justify-between row-start-1 w-full">
-                <div className="flex items-center gap-4">
-                    <Image
-                        className="dark:invert"
-                        src="/assets/logo.png"
-                        alt="Note.lat logo"
-                        width={32}
-                        height={32}
-                        priority
-                    />
-                    <h1 className="text-xl font-semibold">Note.lat</h1>
-                    <span className="hidden sm:block">Lecture note has never been so easy</span>
-                </div>
-                <nav>
-                    <Link href="/login">
-                        <Button className="inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                            Create Now
-                        </Button>
-                    </Link>
-                </nav>
-            </header>
+            <Header />
             <main>
                 <section className="grid gap-8 row-start-2 py-48" id="intro">
                     <div className="flex flex-cols-2 items-center justify-center gap-4 md:justify-start">
@@ -171,22 +151,25 @@ Transcript:`
                     </div>
                 </section>
                 <section className="grid py-48" id="demo">
-                    <h2 className="text-3xl font-semibold">Demo</h2>
-                    <form className="grid gap-2"
-                        onSubmit={handleSum}>
-                        <Textarea className="mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
-                            ref={noteText}
-                            value={noteData}
-                            onChange={onNoteChange}
-                            rows={6} />
-                        <div className="grid">
-                            <Button className="ml-auto inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
-                                type="submit"
-                            >
-                                Summarize this
-                            </Button>
-                        </div>
-                    </form>
+                    <Field>
+                        <h2 className="text-3xl font-semibold">Demo</h2>
+                        <Description className="text-sm/6 text-black/50">Put some transcript here to get a study note in <span className="font-semibold">seconds</span>.</Description>
+                        <form className="grid gap-2"
+                            onSubmit={handleSum}>
+                            <Textarea className="mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
+                                ref={noteText}
+                                value={noteData}
+                                onChange={onNoteChange}
+                                rows={6} />
+                            <div className="grid">
+                                <Button className="ml-auto inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
+                                    type="submit"
+                                >
+                                    Create Note
+                                </Button>
+                            </div>
+                        </form>
+                    </Field>
                 </section>
             </main>
             <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
