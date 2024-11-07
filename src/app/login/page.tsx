@@ -1,7 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@headlessui/react';
 import Form from './form';
 import Header from "@/app/components/header"
 

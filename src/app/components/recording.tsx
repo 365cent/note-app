@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback, useEffect } from 'react'
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import { useState, useRef, useCallback } from 'react'
 import { Button, Textarea } from '@headlessui/react'
 
 export default function Recording() {
@@ -20,84 +19,12 @@ export default function Recording() {
 		Error,
 	}
 
-	let [currentStatus, setCurrentStatus] = useState(RecordingStatus.Idle);
+	const [currentStatus, setCurrentStatus] = useState(RecordingStatus.Idle);
 
 	const onNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setNoteData(event.target.value);
 	};
 
-	const startRecording = useCallback(async () => {
-		try {
-			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-			mediaRecorder.current = new MediaRecorder(stream);
-			audioChunks.current = [];
-
-			const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-			audioContext.current = new AudioContextClass();
-			analyser.current = audioContext.current.createAnalyser();
-			const source = audioContext.current.createMediaStreamSource(stream);
-			source.connect(analyser.current);
-			analyser.current.fftSize = 256;
-			const bufferLength = analyser.current.frequencyBinCount;
-			dataArray.current = new Uint8Array(bufferLength);
-
-			const updateVolume = () => {
-				if (analyser.current && dataArray.current) {
-					analyser.current.getByteFrequencyData(dataArray.current);
-					const average = dataArray.current.reduce((acc, val) => acc + val, 0) / dataArray.current.length;
-					const newVolume = Math.min(100, (average / 128) * 100);
-					console.log('Volume:', newVolume);
-				}
-				animationFrameId.current = requestAnimationFrame(updateVolume);
-			};
-			updateVolume();
-
-			if (mediaRecorder.current) {
-				mediaRecorder.current.ondataavailable = (event: BlobEvent) => {
-					audioChunks.current.push(event.data);
-				};
-				mediaRecorder.current.onstop = async () => {
-					if (animationFrameId.current) {
-						cancelAnimationFrame(animationFrameId.current);
-					}
-					const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
-					const url = URL.createObjectURL(audioBlob);
-					console.log('Recording stopped:', url);
-					processRecording(audioBlob);
-				};
-				setCurrentStatus(RecordingStatus.Recording);
-				mediaRecorder.current.start();
-			}
-		} catch (error) {
-			console.error('Error starting recording:', error);
-		}
-	}, []);
-
-	const stopRecording = useCallback(() => {
-		if (mediaRecorder.current && mediaRecorder.current.state === 'recording') {
-			mediaRecorder.current.stop();
-			console.log('Recording stopped');
-			setCurrentStatus(RecordingStatus.Processing);
-		} else {
-			console.warn('No recording in progress to stop.');
-		}
-	}, [currentStatus]);
-
-	// mediaRecorder.current.onstop = async () => {
-	// 	const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
-
-	// 	// Send audioBlob as a POST request to your backend
-	// 	const response = await fetch('https://your-cloudflare-url.com', {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Content-Type': 'application/octet-stream',
-	// 		},
-	// 		body: await audioBlob.arrayBuffer(),
-	// 	});
-
-	// 	const result = await response.json();
-	// 	console.log('Transcription result:', result);
-	// };
 
 	const processRecording = async (audioBlob: Blob) => {
 		try {
@@ -143,6 +70,80 @@ export default function Recording() {
 			console.error('Failed to process recording:', error);
 		}
 	};
+
+	const startRecording = useCallback(async () => {
+		try {
+			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+			mediaRecorder.current = new MediaRecorder(stream);
+			audioChunks.current = [];
+
+			const AudioContextClass: typeof AudioContext = window.AudioContext;
+			audioContext.current = new AudioContextClass();
+			analyser.current = audioContext.current.createAnalyser();
+			const source = audioContext.current.createMediaStreamSource(stream);
+			source.connect(analyser.current);
+			analyser.current.fftSize = 256;
+			const bufferLength = analyser.current.frequencyBinCount;
+			dataArray.current = new Uint8Array(bufferLength);
+
+			const updateVolume = () => {
+				if (analyser.current && dataArray.current) {
+					analyser.current.getByteFrequencyData(dataArray.current);
+					const average = dataArray.current.reduce((acc, val) => acc + val, 0) / dataArray.current.length;
+					const newVolume = Math.min(100, (average / 128) * 100);
+					console.log('Volume:', newVolume);
+				}
+				animationFrameId.current = requestAnimationFrame(updateVolume);
+			};
+			updateVolume();
+
+			if (mediaRecorder.current) {
+				mediaRecorder.current.ondataavailable = (event: BlobEvent) => {
+					audioChunks.current.push(event.data);
+				};
+				mediaRecorder.current.onstop = async () => {
+					if (animationFrameId.current) {
+						cancelAnimationFrame(animationFrameId.current);
+					}
+					const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+					const url = URL.createObjectURL(audioBlob);
+					console.log('Recording stopped:', url);
+					processRecording(audioBlob);
+				};
+				setCurrentStatus(RecordingStatus.Recording);
+				mediaRecorder.current.start();
+			}
+		} catch (error) {
+			console.error('Error starting recording:', error);
+		}
+	}, [RecordingStatus.Recording, processRecording]);
+
+	const stopRecording = useCallback(() => {
+		if (mediaRecorder.current && mediaRecorder.current.state === 'recording') {
+			mediaRecorder.current.stop();
+			console.log('Recording stopped');
+			setCurrentStatus(RecordingStatus.Processing);
+		} else {
+			console.warn('No recording in progress to stop.');
+		}
+	}, [RecordingStatus.Processing]);
+
+	// mediaRecorder.current.onstop = async () => {
+	// 	const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+
+	// 	// Send audioBlob as a POST request to your backend
+	// 	const response = await fetch('https://your-cloudflare-url.com', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/octet-stream',
+	// 		},
+	// 		body: await audioBlob.arrayBuffer(),
+	// 	});
+
+	// 	const result = await response.json();
+	// 	console.log('Transcription result:', result);
+	// };
+
 
 
 
