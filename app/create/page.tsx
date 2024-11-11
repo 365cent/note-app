@@ -1,5 +1,5 @@
-import Header from "@/app/components/header";
-import Recording from "@/app/components/recording";
+import Header from "../components/header";
+import Recording from "../components/recording";
 
 export default function Create() {
     return (
