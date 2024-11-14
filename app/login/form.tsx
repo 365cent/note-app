@@ -3,7 +3,7 @@ import { Field, Fieldset, Input, Label, Legend } from '@headlessui/react'
 export default function LoginForm() {
 
   return (
-    <div className="w-full max-w-lg px-4">
+    <form className="w-full max-w-lg mx-auto px-4">
       <Fieldset className="space-y-6 rounded-xl bg-black/5 p-6 sm:p-10">
         <Legend className="text-2xl font-semibold text-black">Login</Legend>
         <Field>
@@ -29,6 +29,6 @@ export default function LoginForm() {
           Login
         </button>
       </Fieldset>
-    </div>
+    </form>
   )
 }

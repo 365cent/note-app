@@ -45,7 +45,7 @@ export default function SignForm() {
     }
 
     return (
-        <form className="w-full max-w-lg px-4" onSubmit={handleSignup}>
+        <form className="w-full max-w-lg mx-auto px-4" onSubmit={handleSignup}>
             <Fieldset className="space-y-6 rounded-xl bg-black/5 p-6 sm:p-10">
                 <Legend className="text-2xl font-semibold text-black">Signup</Legend>
                 <Field>
