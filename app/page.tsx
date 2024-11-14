@@ -49,7 +49,7 @@ Transcript:`
 			let buffer = "";
 			setNoteData("");
 
-			reader.read().then(function processText({ value }): Promise<void> {
+			reader.read().then(function processText({ value }): void {
 
 				buffer += decoder.decode(value, { stream: true });
 				const parts = buffer.split("\n");
@@ -69,7 +69,11 @@ Transcript:`
 					}
 				}
 
-				return reader.read().then(processText);
+                if (value) {
+                    reader.read().then(processText);
+                } else {
+                    reader.releaseLock();
+                }
 			});
 		}).catch((error) => {
 			console.error("Fetch error:", error);
