@@ -27,10 +27,6 @@ Transcript:`
 		}
 	}, [noteData]);
 
-	const onNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setNoteData(event.target.value);
-	};
-
 	const handleSum = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
@@ -137,7 +133,7 @@ Transcript:`
 							<Textarea className="mt-3 block w-full resize-none rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25"
 								ref={noteText}
 								value={noteData}
-								onChange={onNoteChange}
+								onChange={e => setNoteData(e.target.value)}
 								rows={6} />
 							<div className="grid">
 								<Button className="ml-auto inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"

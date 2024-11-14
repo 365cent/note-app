@@ -4,19 +4,19 @@ import { useState } from 'react'
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Field, Fieldset, Input, Label, Legend } from '@headlessui/react'
 
 const universities = [
-  { id: 1, name: 'Harvard University', domain: 'harvard.edu' },
-  { id: 2, name: 'Stanford University', domain: 'stanford.edu' },
-  { id: 3, name: 'Massachusetts Institute of Technology', domain: 'mit.edu' },
-  { id: 4, name: 'University of California, Berkeley', domain: 'berkeley.edu' },
-  { id: 5, name: 'University of Oxford', domain: 'ox.ac.uk' },
-  { id: 6, name: 'University of Cambridge', domain: 'cam.ac.uk' },
-  { id: 7, name: 'California Institute of Technology', domain: 'caltech.edu' },
-  { id: 8, name: 'Yale University', domain: 'yale.edu' },
-  { id: 9, name: 'Princeton University', domain: 'princeton.edu' },
-  { id: 10, name: 'University of Chicago', domain: 'uchicago.edu' },
+    { domain: 'harvard.edu', name: 'Harvard University' },
+    { domain: 'stanford.edu', name: 'Stanford University' },
+    { domain: 'mit.edu', name: 'Massachusetts Institute of Technology' },
+    { domain: 'berkeley.edu', name: 'University of California, Berkeley' },
+    { domain: 'ox.ac.uk', name: 'University of Oxford' },
+    { domain: 'cam.ac.uk', name: 'University of Cambridge' },
+    { domain: 'caltech.edu', name: 'California Institute of Technology' },
+    { domain: 'yale.edu', name: 'Yale University' },
+    { domain: 'princeton.edu', name: 'Princeton University' },
+    { domain: 'uchicago.edu', name: 'University of Chicago' },
 ]
 
-export default function LoginForm() {
+export default function SignForm() {
   const [query, setQuery] = useState('')
   const [selectedUniversity, setSelectedUniversity] = useState(universities[0])
 
@@ -30,7 +30,7 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-lg px-4">
       <Fieldset className="space-y-6 rounded-xl bg-black/5 p-6 sm:p-10">
-        <Legend className="text-2xl font-semibold text-black">Login</Legend>
+        <Legend className="text-2xl font-semibold text-black">Signup</Legend>
         <Field>
           <Label htmlFor="username" className="text-sm/6 font-medium text-black">Username</Label>
           <Input
@@ -73,7 +73,7 @@ export default function LoginForm() {
               <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                 {filteredUniversities.map((university) => (
                   <ComboboxOption
-                    key={university.id}
+                    key={university.domain}
                     value={university}
                     // className={({ active }) =>
                     //   cn(
@@ -98,7 +98,6 @@ export default function LoginForm() {
                                 active ? 'text-white' : 'text-black'
                                 } absolute inset-y-0 left-0 flex items-center pl-3`}
                           >
-                            {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
                             <i className='ri-check-line'></i>
                           </span>
                         )}
@@ -114,7 +113,7 @@ export default function LoginForm() {
           type="submit"
           className="mt-6 w-full rounded-lg bg-black py-2 px-3 text-sm font-semibold text-white hover:bg-black/80 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
         >
-          Login
+          Create account
         </button>
       </Fieldset>
     </div>

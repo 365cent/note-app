@@ -20,9 +20,9 @@ export default function Header() {
                 </div>
             </Link>
             <nav className="grid gap-2 grid-flow-col">
-                <Link href="/create">
+                <Link href="/signup">
                     <Button className="inline-flex items-center gap-2 rounded-md border bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 transition focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                        Create Now
+                        Signup
                     </Button>
                 </Link>
                 <Link href="/login">
