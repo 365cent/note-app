@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Field, Fieldset, Input, Label, Legend } from '@headlessui/react'
 
 
-
 export default function SignForm() {
     const [query, setQuery] = useState('');
     const [selectedUniversity, setSelectedUniversity] = useState<{ domain: string; name: string } | null>(null);
