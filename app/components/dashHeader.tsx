@@ -15,7 +15,7 @@ interface HeaderProps {
 
 export default function Header({ user }: HeaderProps) {
     return (
-        <header className="flex items-center justify-between row-start-1 w-full">
+        <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
             <Link href="/">
                 <div className="flex items-center gap-4 rounded-md -m-2 p-2 transition hover:bg-black/5 hover:cursor-pointer">
                     <Image
@@ -30,16 +30,16 @@ export default function Header({ user }: HeaderProps) {
                     <span className="hidden sm:block">Lecture note has never been so easy</span>
                 </div>
             </Link>
-            <nav className="grid gap-2 grid-flow-col">
-                {user && user.username ? (
+            <nav className="flex items-center">
+                {user ? (
                     <>
                         <Link href="/dashboard">
-                            <Button className="inline-flex items-center gap-2 rounded-md border bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 transition focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
+                            <Button className="mr-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 {user.username}
                             </Button>
                         </Link>
                         <Link href="/logout">
-                            <Button className="inline-flex items-center gap-2 rounded-md border border-current bg-white py-1.5 px-3 text-sm/6 font-semibold text-gray-700 shadow-inner shadow-black/10 transition focus:outline-none data-[hover]:bg-gray-600 data-[hover]:text-white data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
+                            <Button className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Logout
                             </Button>
                         </Link>
@@ -47,12 +47,12 @@ export default function Header({ user }: HeaderProps) {
                 ) : (
                     <>
                         <Link href="/signup">
-                            <Button className="inline-flex items-center gap-2 rounded-md border bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 transition focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
+                            <Button className="mr-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Signup
                             </Button>
                         </Link>
                         <Link href="/login">
-                            <Button className="inline-flex items-center gap-2 rounded-md border border-current bg-white py-1.5 px-3 text-sm/6 font-semibold text-gray-700 shadow-inner shadow-black/10 transition focus:outline-none data-[hover]:bg-gray-600 data-[hover]:text-white data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
+                            <Button className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 Login
                             </Button>
                         </Link>
