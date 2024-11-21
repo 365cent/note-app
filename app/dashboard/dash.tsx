@@ -6,14 +6,14 @@ import Link from "next/link"
 import { Button, Combobox } from '@headlessui/react'
 
 // Mock data for notes
-const notes = [
-    { id: 1, title: "Introduction to React", content: "React is a JavaScript library for building user interfaces...", date: "2024-03-15" },
-    { id: 2, title: "Next.js Basics", content: "Next.js is a React framework that enables server-side rendering...", date: "2024-03-16" },
-    { id: 3, title: "Tailwind CSS Tutorial", content: "Tailwind CSS is a utility-first CSS framework...", date: "2024-03-17" },
-    { id: 4, title: "JavaScript ES6 Features", content: "ES6 introduced many new features to JavaScript...", date: "2024-03-18" },
-    { id: 5, title: "TypeScript Fundamentals", content: "TypeScript is a typed superset of JavaScript...", date: "2024-03-19" },
-    { id: 6, title: "Git Version Control", content: "Git is a distributed version control system...", date: "2024-03-20" },
-]
+// const notes = [
+//     { id: 1, title: "Introduction to React", content: "React is a JavaScript library for building user interfaces...", date: "2024-03-15" },
+//     { id: 2, title: "Next.js Basics", content: "Next.js is a React framework that enables server-side rendering...", date: "2024-03-16" },
+//     { id: 3, title: "Tailwind CSS Tutorial", content: "Tailwind CSS is a utility-first CSS framework...", date: "2024-03-17" },
+//     { id: 4, title: "JavaScript ES6 Features", content: "ES6 introduced many new features to JavaScript...", date: "2024-03-18" },
+//     { id: 5, title: "TypeScript Fundamentals", content: "TypeScript is a typed superset of JavaScript...", date: "2024-03-19" },
+//     { id: 6, title: "Git Version Control", content: "Git is a distributed version control system...", date: "2024-03-20" },
+// ]
 
 interface User {
     username: string,
@@ -33,8 +33,8 @@ interface Note {
 
 export default function DashComponents({ user }: HeaderProps) {
     const [query, setQuery] = React.useState('')
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(true)
-    const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(false)
+    const [isSidebarOpen] = React.useState(true)
+    const [isSidebarCollapsed] = React.useState(false)
     // send a request to the server to get the notes
     const [notes, setNotes] = React.useState<Note[]>([])
 
