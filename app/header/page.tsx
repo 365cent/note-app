@@ -1,7 +1,7 @@
 import { getUserCookie } from '../signup/action';
-import Header from '../components/header';
+import HeaderWrap from '../components/header';
 
-export default async function HeaderWrapper() {
+export default async function Header() {
   const user = await getUserCookie();
 
   const userNotNull = {
@@ -9,5 +9,5 @@ export default async function HeaderWrapper() {
     email: user?.email?.value || '', // Ensure it is a string
   };
 
-  return <Header user={userNotNull} />;
+  return <HeaderWrap user={userNotNull} />;
 }

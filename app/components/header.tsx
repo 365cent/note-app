@@ -13,7 +13,7 @@ interface HeaderProps {
     user: User | null
 }
 
-export default function Header({ user }: HeaderProps) {
+export default function frontHeader({ user }: HeaderProps) {
     return (
         <header className="flex items-center justify-between row-start-1 w-full">
             <Link href="/">
