@@ -236,7 +236,7 @@ export default function Settings() {
                         <Combobox.Input
                           className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 dark:text-white focus:ring-0"
                           onChange={(event) => setQuery(event.target.value)}
-                          displayValue={(classes) =>
+                          displayValue={() =>
                             selectedClasses.map((classItem: { id: number; name: string }) => classItem.name).join(', ')
                           }
                         />
