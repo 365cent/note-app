@@ -1,4 +1,4 @@
-import { Field, Fieldset, Input, Label, Legend } from '@headlessui/react'
+import { Field, Fieldset, Input, Label } from '@headlessui/react'
 
 export default function LoginForm() {
 
