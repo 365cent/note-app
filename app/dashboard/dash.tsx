@@ -25,12 +25,10 @@ interface HeaderProps {
 }
 
 interface Note {
-    id: number
-    title: string
-    content: string
-    date: string
-    course: string
-    tag: string
+    note_title: string,
+    note_id: string,
+    note_created_data: string,
+    tag_name: string[]
 }
 
 export default function DashComponents({ user }: HeaderProps) {
@@ -42,21 +40,21 @@ export default function DashComponents({ user }: HeaderProps) {
 
     React.useEffect(() => {
         fetch('https://dash.note.lat/api/getAUserNotes?email=' + user?.email)
-        .then((response) => response.json())
-        .then((data: { notes: Note[] }) => {
-            console.log(data)
-            setNotes(data.notes)
-            console.log(notes)
-        })
-        .catch((error) => {
-            console.error('Error fetching notes:', error);
-        });
+            .then((response) => response.json())
+            .then((data: { data: Note[] }) => {
+                console.log(data)
+                setNotes(data.data)
+                // console.log(notes)
+            })
+            .catch((error) => {
+                console.error('Error fetching notes:', error);
+            });
     }, []);
 
     const filteredNotes = query === ''
         ? notes
         : notes.filter((note) =>
-            note.title.toLowerCase().includes(query.toLowerCase())
+            note.note_title.toLowerCase().includes(query.toLowerCase())
         )
 
     // const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
@@ -117,24 +115,28 @@ export default function DashComponents({ user }: HeaderProps) {
                             </Combobox>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {/* {filteredNotes.map((note) => (
-                                <Link href={`/notes/${note.id}`} key={note.id}>
+                            {filteredNotes.map((note) => (
+                                <Link href={`/notes/${note.note_id}`} key={note.note_id}>
                                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-300">
                                         <div className="px-4 py-5 sm:p-6">
-                                            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{note.title}</h3>
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{note.note_title}</h3>
                                             <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-                                                {note.content.substring(0, 100)}...
+                                                {/* {note.content.substring(0, 100)}... */}
+                                                {/* {note.content} */}
+                                                {note.tag_name.map((tag) => (
+                                                    <span key={tag} className="inline-block bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm font-semibold mr-2 mt-2">{tag}</span>
+                                                ))}
                                             </p>
                                         </div>
                                         <div className="px-4 py-4 sm:px-6 flex justify-between items-center">
-                                            <span className="text-sm text-gray-500">{note.date}</span>
+                                            <span className="text-sm text-gray-500">{note.note_created_data}</span>
                                             <Button className="rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                 <i className="ri-more-line h-5 w-5"></i>
                                             </Button>
                                         </div>
                                     </div>
                                 </Link>
-                            ))} */}
+                            ))}
                         </div>
                     </div>
                 </main>
