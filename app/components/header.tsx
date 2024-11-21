@@ -1,8 +1,12 @@
+"user server";
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@headlessui/react'
+// import { getUserCookie } from '../signup/action';
 
-export default function Header() {
+export default async function Header() {
+    // const user = await getUserCookie();
     return (
         <header className="flex items-center justify-between row-start-1 w-full">
             <Link href="/">

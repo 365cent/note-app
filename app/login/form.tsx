@@ -5,7 +5,7 @@ export default function LoginForm() {
   return (
     <form className="w-full max-w-lg mx-auto px-4">
       <Fieldset className="space-y-6 rounded-xl bg-black/5 p-6 sm:p-10">
-        <Legend className="text-2xl font-semibold text-black">Login</Legend>
+        <h2 className="text-2xl font-semibold text-black">Login</h2>
         <Field>
           <Label htmlFor="email" className="text-sm/6 font-medium text-black">Email</Label>
           <Input
