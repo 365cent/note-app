@@ -31,7 +31,8 @@ export async function handleSignup(formData: FormData) {
 
   if (response.ok) {
     // We'll handle cookie setting in a separate server action
-    return { success: true, username, email }
+    const responseData = await response.json()
+    return { success: responseData.success, user: responseData.user }
   } else if (response.status === 409) {
     return { success: false, error: 'User already exists' }
   } else {

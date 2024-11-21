@@ -51,8 +51,8 @@ export default function SignupForm() {
         const result = await handleSignup(formData)
 
         if (result.success) {
-            if (result.username && result.email) {
-                await setUserCookie(result.username, result.email);
+            if (result.user) {
+                await setUserCookie(result.user.user_name, result.user.user_email)
                 router.push('/dashboard')
             }
         } else {

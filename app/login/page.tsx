@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import Form from './form';
-import Header from "../components/header"
+import Header from "../header/page"
 
 
 export default function Login() {
