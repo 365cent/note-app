@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import Header from "./components/header"
+import Header from "./header/page"
 import { Button } from '@headlessui/react'
 import { Field, Description, Textarea } from '@headlessui/react'
 
