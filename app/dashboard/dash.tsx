@@ -27,8 +27,10 @@ interface HeaderProps {
 interface Note {
     note_title: string,
     note_id: string,
-    note_created_data: string,
-    tag_name: string[]
+    note_created_date: string,
+    tag_name: string[],
+    course_name: string,
+    note_content: string
 }
 
 export default function DashComponents({ user }: HeaderProps) {
@@ -49,7 +51,7 @@ export default function DashComponents({ user }: HeaderProps) {
             .catch((error) => {
                 console.error('Error fetching notes:', error);
             });
-    }, []);
+    }, [user])
 
     const filteredNotes = query === ''
         ? notes
@@ -122,14 +124,17 @@ export default function DashComponents({ user }: HeaderProps) {
                                             <h3 className="text-lg font-medium text-gray-900 dark:text-white">{note.note_title}</h3>
                                             <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
                                                 {/* {note.content.substring(0, 100)}... */}
-                                                {/* {note.content} */}
-                                                {note.tag_name.map((tag) => (
-                                                    <span key={tag} className="inline-block bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm font-semibold mr-2 mt-2">{tag}</span>
-                                                ))}
+                                                {note.note_content}
                                             </p>
+                                            <span className="inline-block bg-blue-100 dark:bg-gray-700 text-blue-800 dark:text-white rounded-full px-3 py-1 text-sm font-semibold mr-2 mt-4">
+                                                {note.course_name}
+                                            </span>
+                                            {note.tag_name.map((tag) => (
+                                                <span key={tag} className="inline-block bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full px-3 py-1 text-sm font-semibold mr-2 mt-2">{tag}</span>
+                                            ))}
                                         </div>
                                         <div className="px-4 py-4 sm:px-6 flex justify-between items-center">
-                                            <span className="text-sm text-gray-500">{note.note_created_data}</span>
+                                            <span className="text-sm text-gray-500">{note.note_created_date}</span>
                                             <Button className="rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                                 <i className="ri-more-line h-5 w-5"></i>
                                             </Button>

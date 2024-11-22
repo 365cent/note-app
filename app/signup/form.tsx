@@ -31,7 +31,7 @@ export default function SignupForm() {
             }
         }
         onLoad()
-    }, [])
+    }, [router])
 
     const filteredUniversities =
         query === ''
