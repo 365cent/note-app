@@ -26,7 +26,7 @@ export default function Recording() {
 	};
 
 
-	const processRecording = async (audioBlob: Blob) => {
+	const processRecording = useCallback(async (audioBlob: Blob) => {
 		try {
 			const response = await fetch('https://quiet-shape-df55.volume.workers.dev/', {
 				method: 'POST',
@@ -69,7 +69,7 @@ export default function Recording() {
 		} catch (error) {
 			console.error('Failed to process recording:', error);
 		}
-	};
+	}, []);
 
 	const startRecording = useCallback(async () => {
 		try {
