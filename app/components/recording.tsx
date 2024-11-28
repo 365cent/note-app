@@ -69,7 +69,7 @@ export default function Recording() {
 		} catch (error) {
 			console.error('Failed to process recording:', error);
 		}
-	}, []);
+	}, [RecordingStatus.Idle]);
 
 	const startRecording = useCallback(async () => {
 		try {
