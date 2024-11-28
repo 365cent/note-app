@@ -117,7 +117,7 @@ export default function DashComponents({ user }: HeaderProps) {
                             </Combobox>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredNotes.map((note) => (
+                            {filteredNotes && filteredNotes.map((note) => (
                                 <Link href={`/notes/${note.note_id}`} key={note.note_id}>
                                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg hover:shadow-md transition-shadow duration-300">
                                         <div className="px-4 py-5 sm:p-6">

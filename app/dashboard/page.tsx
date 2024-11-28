@@ -1,5 +1,5 @@
 
-import { getUserCookie } from '../signup/action';
+import { getUserCookie } from '../libs/action';
 import Header from "../components/dashHeader";
 import DashComponents from "./dash";
 

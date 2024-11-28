@@ -1,10 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
-import { fetchUniversityList, handleSignup, setUserCookie, getUserCookie } from './action'
+import { fetchUniversityList, handleSignup, setUserCookie, getUserCookie } from '../libs/action'
 
 interface University {
     domain: string
@@ -17,7 +16,6 @@ export default function SignupForm() {
     const [universities, setUniversities] = useState<University[]>([])
     const [error, setError] = useState<string | null>(null)
     const router = useRouter()
-
 
     useEffect(() => {
         const onLoad = async () => {
