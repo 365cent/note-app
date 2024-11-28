@@ -1,4 +1,4 @@
-import { getUserCookie } from '../signup/action';
+import { getUserCookie } from '../libs/action';
 import HeaderWrap from './frontheader';
 
 export default async function Header() {
