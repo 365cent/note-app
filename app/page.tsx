@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Header from "./components/header";
+import Header from "./components/homeHeader";
 import Demo from "./components/demo";
 
 export default function Home() {
