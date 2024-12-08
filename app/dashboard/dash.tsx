@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from "next/link"
-import { Sidebar } from '../components/sidebar'
+import Sidebar from '../components/sidebar'
 import Header from '../components/header'
 
 interface User {

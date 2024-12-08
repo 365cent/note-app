@@ -16,7 +16,7 @@ const menuItems = [
   { href: '/logout', icon: 'ri-logout-box-line', label: 'Logout' },
 ]
 
-export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
+export default function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
   const pathname = usePathname()
   const [isMobile, setIsMobile] = useState(false)
 
@@ -55,9 +55,6 @@ export function Sidebar({ isOpen, toggleSidebar }: SidebarProps) {
             <h1 className="text-xl font-semibold">Note.lat</h1>
           </Link>
           <button onClick={toggleSidebar} className="md:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-            {/* <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg> */}
             <i className="ri-close-line text-2xl"></i>
           </button>
         </div>

@@ -8,7 +8,7 @@ interface Note {
     note_created_date: string,
     tag_name: string[],
     course_name: string,
-    note_content: string
+    note_content: string,
 }
 
 export async function fetchUniversityList() {
