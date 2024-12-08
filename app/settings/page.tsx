@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from "next/link"
 import Image from "next/image"
-import { Button, Switch, Combobox, Listbox } from '@headlessui/react'
+import { Button, Switch, Combobox, Listbox, ListboxOptions, ListboxOption, Label, ListboxButton } from '@headlessui/react'
 
 const classes = [
   { id: 1, name: 'Introduction to Computer Science' },
@@ -152,21 +152,21 @@ export default function Settings() {
               <form className="space-y-4">
                 <div>
                   <Listbox value={university} onChange={setUniversity}>
-                    <Listbox.Label className="block text-sm font-medium text-gray-700 dark:text-gray-200">University Name</Listbox.Label>
+                    <Label className="block text-sm font-medium text-gray-700 dark:text-gray-200">University Name</Label>
                     <div className="relative mt-1">
-                      <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white dark:bg-gray-700 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
+                      <ListboxButton className="relative w-full cursor-default rounded-lg bg-white dark:bg-gray-700 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
                         <span className="block truncate">{university || 'Select your university'}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                           <i className="ri-arrow-down-s-line h-5 w-5 text-gray-400" aria-hidden="true" />
                         </span>
-                      </Listbox.Button>
-                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      </ListboxButton>
+                      <ListboxOptions className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {['University A', 'University B', 'University C'].map((uni) => (
-                          <Listbox.Option
+                          <ListboxOption
                             key={uni}
-                            className={({ active }) =>
+                            className={({ focus }) =>
                               `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                active ? 'bg-blue-100 text-blue-900' : 'text-gray-900 dark:text-white'
+                                focus ? 'bg-blue-100 text-blue-900' : 'text-gray-900 dark:text-white'
                               }`
                             }
                             value={uni}
@@ -183,9 +183,9 @@ export default function Settings() {
                                 ) : null}
                               </>
                             )}
-                          </Listbox.Option>
+                          </ListboxOption>
                         ))}
-                      </Listbox.Options>
+                      </ListboxOptions>
                     </div>
                   </Listbox>
                 </div>
@@ -244,7 +244,7 @@ export default function Settings() {
                           <i className="ri-arrow-down-s-line h-5 w-5 text-gray-400" aria-hidden="true" />
                         </Combobox.Button>
                       </div>
-                      <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      <Combobox.Options className="absolute mt-1 max-h-60 w-full z-10 overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {filteredClasses.length === 0 && query !== '' ? (
                           <div className="relative cursor-default select-none py-2 px-4 text-gray-700 dark:text-gray-300">
                             Nothing found.
