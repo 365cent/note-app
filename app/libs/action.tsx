@@ -2,6 +2,15 @@
 
 import { cookies } from 'next/headers'
 
+interface Note {
+    note_title: string,
+    note_id: string,
+    note_created_date: string,
+    tag_name: string[],
+    course_name: string,
+    note_content: string
+}
+
 export async function fetchUniversityList() {
     const response = await fetch('https://dash.note.lat/api/getAllUni', {
         method: 'GET'
@@ -73,8 +82,34 @@ export async function setUserCookie(username: string, email: string) {
 
 export async function getUserCookie() {
     const cookieStore = await cookies()
-    return {
-        username: cookieStore.get('user'),
-        email: cookieStore.get('email'),
+    try {
+        const username = cookieStore.get('user')
+        const email = cookieStore.get('email')
+        return { username, email }
     }
+    catch (e) {
+        console.log(e)
+        return null
+    }
+}
+
+export async function delUserCookie() {
+    const cookieStore = await cookies()
+    cookieStore.delete('user')
+    cookieStore.delete('email')
+}
+
+export async function createNote(data: Note) {
+    const response = await fetch('https://dash.note.lat/api/addNote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data), // Use the passed `data` directly
+    });
+
+    console.log(data);
+
+    const json = await response.json();
+    return json.data; // Return the relevant part of the response
 }
