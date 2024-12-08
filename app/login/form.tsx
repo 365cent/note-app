@@ -60,7 +60,7 @@ export default function LoginForm() {
     useEffect(() => {
         const onLoad = async () => {
             const user = await getUserCookie()
-            if (user.username) {
+            if (user && user.username) {
                 console.log('User already logged in')
                 router.push('/dashboard')
             }

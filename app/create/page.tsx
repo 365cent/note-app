@@ -1,4 +1,4 @@
-import Header from "../components/header";
+import Header from "../components/homeHeader";
 import Recording from "../components/recording";
 
 export default function Create() {

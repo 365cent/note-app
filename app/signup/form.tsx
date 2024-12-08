@@ -20,7 +20,7 @@ export default function SignupForm() {
     useEffect(() => {
         const onLoad = async () => {
             const user = await getUserCookie()
-            if (user.username) {
+            if (user && user.username) {
                 console.log('User already logged in')
                 router.push('/dashboard')
             }
@@ -96,11 +96,11 @@ export default function SignupForm() {
                 <div>
                     <label htmlFor="university" className="text-sm/6 font-medium text-black">University</label>
                     <div className="relative">
-                        <Combobox value={selectedUniversity} onChange={setSelectedUniversity}>
+                        <Combobox value={selectedUniversity} onChange={setSelectedUniversity} onClose={() => setQuery('')}>
                             <div className="relative">
                                 <ComboboxInput
                                     className="w-full rounded-lg border-none bg-black/5 py-1.5 pr-8 pl-3 text-sm/6 text-black focus:outline-none focus:outline-2 focus:-outline-offset-2 focus:outline-black/25"
-                                    displayValue={(university: University) => university?.name}
+                                    displayValue={(university: University) => university?.name ?? ''}
                                     onChange={(event) => setQuery(event.target.value)}
                                     placeholder="Search for your university"
                                     onFocus={fetchUniversities}
@@ -114,21 +114,22 @@ export default function SignupForm() {
                                     <ComboboxOption
                                         key={university.domain}
                                         value={university}
-                                        className="group flex cursor-default items-center gap-2 rounded-lg mx-1 py-1 px-2 select-none data-[headlessui-state-active]:bg-black/10 empty:bg-transparent"
+                                        className={({ focus }) =>
+                                            `group flex cursor-default select-none items-center gap-2 rounded-lg mx-1 py-1 px-2 ${focus ? 'bg-blue-100 text-blue-900' : ''
+                                            }`
+                                        }
                                     >
-                                        <i className="invisible size-4 fill-white group-data-[headlessui-state-selected]:visible ri-check-line"></i>
-                                        <div className="text-sm/6 text-gray-900">{university.name}</div>
+                                        {({ selected }) => (
+                                            <>
+                                                <i
+                                                    className={`ri-check-line h-5 w-5 ${selected ? 'text-black visible' : 'text-transparent invisible'}`}
+                                                    aria-hidden="true"
+                                                ></i>
+                                                <span className="text-sm/6 text-gray-900">{university.name}</span>
+                                            </>
+                                        )}
                                     </ComboboxOption>
                                 ))}
-                                {filteredUniversities.length === 0 && (
-                                    <ComboboxOption
-                                        value=""
-                                        className="group flex cursor-default items-center gap-2 rounded-lg mx-1 py-1 px-2 select-none data-[headlessui-state-active]:bg-black/10 empty:bg-transparent"
-                                    >
-                                        <i className="invisible size-4 fill-white group-data-[headlessui-state-selected]:visible ri-check-line"></i>
-                                        <div className="text-sm/6 text-gray-900">No university found</div>
-                                    </ComboboxOption>
-                                )}
                             </ComboboxOptions>
                         </Combobox>
                     </div>
