@@ -2,6 +2,12 @@
 
 import { cookies } from 'next/headers'
 
+
+interface User {
+    username: string,
+    email: string
+}
+
 interface Note {
     note_title: string,
     note_id: string,
@@ -91,6 +97,22 @@ export async function getUserCookie() {
         console.log(e)
         return null
     }
+}
+
+export async function getUser() {
+    const cookieStore = await cookies()
+    const username = cookieStore.get('user')
+    const email = cookieStore.get('email')
+    
+    if (!username || !email) {
+        return null
+    }
+
+    const user: User = {
+        username: username.value,
+        email: email.value
+    }
+    return user
 }
 
 export async function delUserCookie() {

@@ -14,7 +14,7 @@ function DiaModal() {
     const status = searchParams.get('status')
     const [isOpen, setIsOpen] = useState(true);
 
-    if (status !== 'already') {
+    if (status !== 'already' && status !== 'unauthorized') {
         return null
     }
     
@@ -31,12 +31,26 @@ function DiaModal() {
                             transition
                             className="w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
                         >
-                            <DialogTitle as="h3" className="text-base/7 font-medium text-black">
-                                User already exists
-                            </DialogTitle>
-                            <p className="mt-2 text-sm/6 text-gray-500">
-                                Please login with your credentials.
-                            </p>
+                            {status === 'already' && (
+                                <>
+                                    <DialogTitle as="h3" className="text-base/7 font-medium text-black">
+                                        User already exists
+                                    </DialogTitle>
+                                    <p className="mt-2 text-sm/6 text-gray-500">
+                                        Please login with your credentials.
+                                    </p>
+                                </>
+                            )}
+                            {status === 'unauthorized' && (
+                                <>
+                                    <DialogTitle as="h3" className="text-base/7 font-medium text-black">
+                                        User not logged in
+                                    </DialogTitle>
+                                    <p className="mt-2 text-sm/6 text-gray-500">
+                                        Please login to continue.
+                                    </p>
+                                </>
+                            )}
                             <div className="mt-4">
                                 <Button
                                     className="inline-flex items-center gap-2 rounded-md bg-black py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-black/10 focus:outline-none data-[hover]:bg-gray-800 data-[focus]:outline-1 data-[focus]:outline-black data-[open]:bg-gray-900"
