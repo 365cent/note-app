@@ -2,6 +2,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getUser } from '../libs/action';
 
 interface User {
     username: string,
@@ -13,7 +16,24 @@ interface HeaderProps {
     toggleSidebar: () => void
 }
 
-export default function Header({ user, toggleSidebar }: HeaderProps) {
+export default function Header({ toggleSidebar }: HeaderProps) {
+    const router = useRouter();
+    const [user, setUser] = useState<User | null>(null);
+    useEffect(() => {
+        async function fetchUser() {
+            const userData = await getUser();
+            setUser(userData);
+            if (!userData) {
+                const timer = setTimeout(() => {
+                    router.push('/login?status=unauthorized');
+                }, 3000);
+                return () => clearTimeout(timer);
+            }
+        }
+        fetchUser();
+    }, [router]);
+
+
     return (
         <header className="flex items-center justify-between px-6 py-4 h-16 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
             <div className="flex items-center">
