@@ -2,16 +2,16 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { Button, Textarea, Field, Input, Label } from '@headlessui/react'
-import { createNote } from '../libs/action'
-import { getUserCookie } from '../libs/action'
+import { createNote, getUser } from '../libs/action'
+import Note from '../notes/[id]/note';
+
 
 interface Note {
-    note_title: string,
-    note_id: string,
-    note_created_date: string,
-    tag_name: string[],
-    course_name: string,
-    note_content: string
+    user_email: string;
+    course_id: string;
+    note_title: string;
+    note_content: string;
+    note_tags: string[];
 }
 
 export default function Recording() {
@@ -22,6 +22,9 @@ export default function Recording() {
     const dataArray = useRef<Uint8Array | null>(null);
     const audioChunks = useRef<Blob[]>([]);
     const animationFrameId = useRef<number | null>(null);
+    const [courseId] = useState<string>("");
+    const [courseName] = useState<string>("");
+    const [tags] = useState<string[]>([]);
 
     enum RecordingStatus {
         Idle,
@@ -152,24 +155,22 @@ export default function Recording() {
 
     const handleNoteCreation = async () => {
         try {
-            // const courseId = (document.getElementById('courseId') as HTMLInputElement).value;
-            // const courseName = (document.getElementById('courseName') as HTMLInputElement).value;
-            // const tags = (document.getElementById('tags') as HTMLInputElement).value;
 
-            const userCookie = await getUserCookie();
-            if (!userCookie) {
+            const user = await getUser();
+            if (!user) {
                 console.error('User not logged in');
                 return;
             }
 
             const note: Note = {
-                note_title: 'Test Note',
-                note_id: '123',
-                note_created_date: '2024-01-01',
-                tag_name: ['test', 'note'],
-                course_name: 'Software Engineering',
-                note_content: 'This is a test note',
+                user_email: user.email,
+                course_id: courseId,
+                note_title: courseName,
+                note_content: noteData,
+                note_tags: tags
             };
+
+            console.log(note);
 
             const response = await createNote(note);
             if (response.success) {
@@ -182,62 +183,129 @@ export default function Recording() {
         }
     }
 
+    const handleCopySuccess = () => {
+        const button = document.querySelector('button:has(.ri-file-copy-line)');
+        if (!button) return;
+
+        const icon = button.querySelector('i');
+        const text = button.lastChild;
+        if (!icon || !text) return;
+
+        icon.className = 'ri-check-line text-lg';
+        text.textContent = ' Copied';
+
+        setTimeout(() => {
+            icon.className = 'ri-file-copy-line text-lg';
+            text.textContent = ' Copy Note';
+        }, 3000);
+    };
+
     return (
-        <div className="grid gap-2 my-2 py-2 px-4 w-full max-w-lg divide-y divide-black/5 rounded-xl bg-gray-100">
-            <Textarea className="mt-3 block w-full p-4 text-base font-sans border border-blue-500 rounded-md resize-y focus:outline focus:outline-3 focus:outline-blue-500/30 transition duration-300"
+        <div className="grid gap-4 my-4 w-full max-w-2xl bg-white">
+            <Textarea
+                className="w-full px-3 py-2 placeholder-gray-400 rounded-md border border-gray-300 bg-white text-sm text-gray-700
+                         focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-200"
                 value={noteData}
                 onChange={onNoteChange}
-                rows={6} />
-            <div className="grid gap-2 ml-auto sm:grid-flow-col">
-                <Button onClick={startRecording} disabled={currentStatus == RecordingStatus.Recording || currentStatus === RecordingStatus.Processing} className="ml-auto inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white disabled:bg-gray-200"
-                    type="submit">
-                    <i className="ri-mic-line"></i>
+                placeholder="Your note content will appear here..."
+                rows={6}
+            />
+
+            <div className="flex flex-wrap gap-3 pt-4">
+                <Button
+                    onClick={startRecording}
+                    disabled={currentStatus == RecordingStatus.Recording || currentStatus === RecordingStatus.Processing}
+                    className="inline-flex items-center gap-2 rounded-md bg-blue-600 py-2 px-4 text-sm font-medium text-white
+                             hover:bg-blue-700 focus:ring-2 focus:ring-blue-500/20 disabled:bg-gray-300 disabled:cursor-not-allowed
+                             transition duration-200"
+                    type="button">
+                    <i className="ri-mic-line text-lg"></i>
                     Start Recording
                 </Button>
+
+                {currentStatus !== RecordingStatus.Recording && currentStatus !== RecordingStatus.Processing && (
+                    <Button
+                        onClick={() => navigator.clipboard.writeText(noteData)
+                            .then(() => {
+                                handleCopySuccess();
+                            })
+                        }
+                        className="inline-flex items-center gap-2 rounded-md bg-gray-600 py-2 px-4 text-sm font-medium text-white
+                             hover:bg-gray-700 focus:ring-2 focus:ring-gray-500/20 disabled:bg-gray-300 disabled:cursor-not-allowed
+                             transition duration-200"
+                        type="button">
+                        <i className="ri-file-copy-line text-lg"></i>
+                        Copy Note
+                    </Button>
+                )}
+
                 {currentStatus !== RecordingStatus.Idle && currentStatus !== RecordingStatus.Processed && (
-                    <Button onClick={stopRecording} disabled={currentStatus !== RecordingStatus.Recording} className="ml-auto inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 hover:bg-red-600 data-[open]:bg-red-700 data-[focus]:outline-1 data-[focus]:outline-white disabled:bg-red-200">
-                        <i className="ri-stop-circle-line"></i>
+                    <Button
+                        onClick={stopRecording}
+                        disabled={currentStatus !== RecordingStatus.Recording}
+                        className="inline-flex items-center gap-2 rounded-md bg-red-600 py-2 px-4 text-sm font-medium text-white
+                                 hover:bg-red-700 focus:ring-2 focus:ring-red-500/20 disabled:bg-gray-300 disabled:cursor-not-allowed
+                                 transition duration-200">
+                        <i className="ri-stop-circle-line text-lg"></i>
                         Stop Recording
                     </Button>
                 )}
+
                 {currentStatus !== RecordingStatus.Idle && currentStatus !== RecordingStatus.Recording && (
-                    <Button onClick={playRecording} className="ml-auto inline-flex items-center gap-2 rounded-md bg-red-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-red-600 data-[open]:bg-red-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                        <i className="ri-play-line"></i>
+                    <Button
+                        onClick={playRecording}
+                        className="inline-flex items-center gap-2 rounded-md bg-green-600 py-2 px-4 text-sm font-medium text-white
+                                 hover:bg-green-700 focus:ring-2 focus:ring-green-500/20 transition duration-200">
+                        <i className="ri-play-line text-lg"></i>
                         Play Recording
                     </Button>
                 )}
             </div>
-            <div className='grid gap-2 mt-2'>
-                <div className="grid gap-2 mt-2">
-                    <Field className="flex flex-row items-center gap-2">
-                        <Label htmlFor="courseId" className="block text-sm font-medium text-gray-700 w-24 ml-auto">Course Id</Label>
+
+            <div className="space-y-4 pt-4">
+                <div className="grid gap-4">
+                    <Field className="flex items-center justify-between gap-4">
+                        <Label htmlFor="courseId" className="text-sm font-medium text-gray-700 w-1/4">Course Code</Label>
                         <Input
                             id="courseId"
                             type="text"
-                            className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={courseId}
+                            className="rounded-md border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 w-3/4
+                                     focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-200"
                         />
                     </Field>
-                    <Field className="flex flex-row items-center gap-2">
-                        <Label htmlFor="courseName" className="block text-sm font-medium text-gray-700 w-24 ml-auto">Course Name</Label>
+
+                    <Field className="flex items-center justify-between gap-4">
+                        <Label htmlFor="courseName" className="text-sm font-medium text-gray-700 w-1/4">Course Name</Label>
                         <Input
                             id="courseName"
                             type="text"
-                            className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={courseName}
+                            className="rounded-md border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 w-3/4
+                                     focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-200"
                         />
                     </Field>
-                    <Field className="flex flex-row items-center gap-2">
-                        <Label htmlFor="courseName" className="block text-sm font-medium text-gray-700 w-24 ml-auto">Tags</Label>
+
+                    <Field className="flex items-center justify-between gap-4">
+                        <Label htmlFor="tags" className="text-sm font-medium text-gray-700 w-1/4">Tags</Label>
                         <Input
-                            id="courseName"
+                            id="tags"
                             type="text"
-                            className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-1.5 px-3 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="rounded-md border border-gray-300 bg-white py-2 px-3 text-sm text-gray-700 w-3/4
+                                     focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition duration-200"
                         />
                     </Field>
                 </div>
-                <Button onClick={handleNoteCreation} className="ml-auto inline-flex items-center gap-2 rounded-md bg-blue-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-blue-600 data-[open]:bg-blue-700 data-[focus]:outline-1 data-[focus]:outline-white">
-                    <i className="ri-save-line"></i>
-                    Save Note
-                </Button>
+
+                <div className="flex justify-end pt-2">
+                    <Button
+                        onClick={handleNoteCreation}
+                        className="inline-flex items-center gap-2 rounded-md bg-blue-600 py-2 px-4 text-sm font-medium text-white
+                                 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500/20 transition duration-200">
+                        <i className="ri-save-line text-lg"></i>
+                        Save Note
+                    </Button>
+                </div>
             </div>
         </div>
     );
