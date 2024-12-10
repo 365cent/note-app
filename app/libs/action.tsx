@@ -9,12 +9,11 @@ interface User {
 }
 
 interface Note {
-    note_title: string,
-    note_id: string,
-    note_created_date: string,
-    tag_name: string[],
-    course_name: string,
-    note_content: string,
+    user_email: string;
+    course_id: string;
+    note_title: string;
+    note_content: string;
+    note_tags: string[];
 }
 
 export async function fetchUniversityList() {
