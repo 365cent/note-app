@@ -12,8 +12,7 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ### AI-Powered Note Processing
 - Automatic note summarization using LLaMA
 - Intelligent title generation
-- Smart tag extraction and categorization
-- Real-time processing and streaming responses
+- Smart tag extraction and categorization- Real-time processing and streaming responses
 
 ### User Management
 - Secure user authentication and authorization
@@ -32,7 +31,7 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ![Home](./screenshots/home.png)
 
 #### Mobile Home
-![Mobile Home](./screenshots/home-mobile.png)
+<img src="./screenshots/home-mobile.png" width="50%" align="center">
 
 #### User Logged In
 ![User Logged In](./screenshots/home-logged.png)
@@ -57,13 +56,13 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ![Login](./screenshots/login.png)
 
 #### Mobile Login
-![Mobile Login](./screenshots/login-mobile.png)
+<img src="./screenshots/login-mobile.png" width="50%" align="center">
 
 ### Register
 ![Register](./screenshots/register.png)
 
 #### Mobile Register
-![Mobile Register](./screenshots/register-mobile.png)
+<img src="./screenshots/register-mobile.png" width="50%" align="center">
 
 #### University Selection
 ![University Selection](./screenshots/university.png)
@@ -72,10 +71,10 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ![Dashboard](./screenshots/dashboard.png)
 
 #### Mobile Dashboard
-![Mobile Dashboard](./screenshots/dashboard-mobile.png)
+<img src="./screenshots/dashboard-mobile.png" width="50%" align="center">
 
 #### Collapsable Sidebar
-![Collapsable Sidebar](./screenshots/mobile-sidebar.png)
+<img src="./screenshots/mobile-sidebar.png" width="50%" align="center">
 
 ### Note Management
 ![Note Management](./screenshots/note-management.png)
@@ -129,10 +128,8 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 
 ## Getting Started
 
-1. Clone the repository
-```
-git clone https://github.com/365cent/note-app
-```
+1. Clone the repository```
+git clone https://github.com/365cent/note-app```
 
 2. Install dependencies
 ```
@@ -166,3 +163,5 @@ This project is built with the help of the following resources:
 Special thanks to:
 - [MSomnia](https://github.com/MSomnia) for developing the Neo4j backend
 - [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) for providing free credits for AI transcription and text generation
+
+
