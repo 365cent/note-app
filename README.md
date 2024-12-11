@@ -31,9 +31,20 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ### Home
 ![Home](./screenshots/home.png)
 
+#### Mobile Home
+![Mobile Home](./screenshots/home-mobile.png)
+
+#### User Logged In
+![User Logged In](./screenshots/home-logged.png)
+
+### Demo
+![Demo](./screenshots/demo.png)
+
 ### Recording Interface
-#### Recording Page Idle
+#### Recording Page without Login
 ![Recording Page](./screenshots/recording-page.png)
+#### Recording Page Idle
+![Recording Page](./screenshots/recording-page-idle.png)
 #### Recording In Progress
 ![Recording](./screenshots/recording.png)
 #### Recording finished
@@ -45,8 +56,14 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ### Login
 ![Login](./screenshots/login.png)
 
+#### Mobile Login
+![Mobile Login](./screenshots/login-mobile.png)
+
 ### Register
 ![Register](./screenshots/register.png)
+
+#### Mobile Register
+![Mobile Register](./screenshots/register-mobile.png)
 
 #### University Selection
 ![University Selection](./screenshots/university.png)
@@ -54,11 +71,23 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ### Dashboard
 ![Dashboard](./screenshots/dashboard.png)
 
+#### Mobile Dashboard
+![Mobile Dashboard](./screenshots/dashboard-mobile.png)
+
+#### Collapsable Sidebar
+![Collapsable Sidebar](./screenshots/mobile-sidebar.png)
+
 ### Note Management
 ![Note Management](./screenshots/note-management.png)
 
 #### Note Details
 ![Note Details](./screenshots/note.png)
+
+### Note Recommendation
+![Note Recommendation](./screenshots/recommendation.png)
+
+#### Navigate to Recommended Notes
+![Navigate to Recommended Notes](./screenshots/recommended-notes.png)
 
 ### Settings
 ![Settings](./screenshots/settings.png)
