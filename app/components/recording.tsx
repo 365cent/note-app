@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useRouter } from 'next/navigation';
 import { Button, Textarea, Field, Input, Label, Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { createNote, getUser } from '../libs/action'
 import Note from '../notes/[id]/note';
@@ -32,7 +33,7 @@ export default function Recording() {
     const [noteTitle, setNoteTitle] = useState<string>("");
     const [tags, setTags] = useState<string[]>([]);
     const [user, setUser] = useState<User | null>(null);
-
+    const router = useRouter();
     const prompt = `Create detailed, comprehensive study notes from the following transcript. Ensure that the notes include:
 1. Key points and summaries of each main topic covered.
 2. Definitions of any technical terms, with examples when relevant.
@@ -350,13 +351,12 @@ Transcript:`;
                 note_title: noteTitle,
                 note_content: noteData,
                 note_tags: tags
-            };  
-
-            console.log(note);
+            };
 
             const response = await createNote(note);
             if (response.success) {
                 console.log('Note created successfully:', response.note);
+                router.push(`/notes/${response.note.note_id}`);
             } else {
                 console.error('Failed to create note:', response.error);
             }

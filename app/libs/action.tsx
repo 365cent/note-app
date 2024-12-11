@@ -131,7 +131,10 @@ export async function createNote(data: Note) {
         body: JSON.stringify(data), // Use the passed `data` directly
     });
 
-    const json = await response.json();
-    console.log(json);
-    return json.data; // Return the relevant part of the response
+    if (response.ok) {
+        const responseData = await response.json();
+        return { success: responseData.success, note: responseData.note };
+    } else {
+        return { success: false, error: 'Failed to create note' };
+    }
 }
