@@ -31,8 +31,9 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ![Home](./screenshots/home.png)
 
 #### Mobile Home
-<img src="./screenshots/home-mobile.png" width="50%" align="center">
-
+<center>
+<img src="./screenshots/home-mobile.png" width="50%">
+</center>
 #### User Logged In
 ![User Logged In](./screenshots/home-logged.png)
 
@@ -56,13 +57,17 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ![Login](./screenshots/login.png)
 
 #### Mobile Login
-<img src="./screenshots/login-mobile.png" width="50%" align="center">
+<center>
+<img src="./screenshots/login-mobile.png" width="50%">
+</center>
 
 ### Register
 ![Register](./screenshots/register.png)
 
 #### Mobile Register
-<img src="./screenshots/register-mobile.png" width="50%" align="center">
+<center>
+<img src="./screenshots/register-mobile.png" width="50%">
+</center>
 
 #### University Selection
 ![University Selection](./screenshots/university.png)
@@ -71,10 +76,14 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 ![Dashboard](./screenshots/dashboard.png)
 
 #### Mobile Dashboard
-<img src="./screenshots/dashboard-mobile.png" width="50%" align="center">
+<center>
+<img src="./screenshots/dashboard-mobile.png" width="50%">
+</center>
 
 #### Collapsable Sidebar
-<img src="./screenshots/mobile-sidebar.png" width="50%" align="center">
+<center>
+<img src="./screenshots/mobile-sidebar.png" width="50%">
+</center>
 
 ### Note Management
 ![Note Management](./screenshots/note-management.png)
