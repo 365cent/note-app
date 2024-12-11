@@ -1,4 +1,4 @@
-import { getUserCookie } from '../../libs/action';
+import { getUser } from '../../libs/action';
 import { notFound } from 'next/navigation'
 import Note from './note'
 
@@ -18,60 +18,44 @@ type NotePageProps = Promise<{ id: string }>
 
 
 async function getNote(id: string): Promise<Note> {
-    // Simulate API call with delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+        const response = await fetch(`https://dash.note.lat/api/getANote?note_id=${id}`);
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                return notFound();
+            }
+            throw new Error('Failed to fetch note');
+        }
 
-    // This is mock data - replace with actual API call
-    const note = {
-        id,
-        title: 'Introduction to Neural Networks',
-        content: `
-# Introduction to React
+        const data = await response.json();
+        
+        if (!data.success || !data.data[0]) {
+            return notFound();
+        }
 
-React is a JavaScript library for building user interfaces. It's declarative, efficient, and flexible.
+        const noteData = data.data[0];
+        
+        return {
+            id: noteData.note_id,
+            title: noteData.note_title,
+            content: noteData.note_content,
+            createdAt: noteData.note_created_date || new Date().toISOString(),
+            updatedAt: noteData.note_created_date || new Date().toISOString(),
+            courseName: noteData.course_of_note,
+            tags: noteData.tag_name || []
+        };
 
-## Key Concepts
-
-1. **Components**: The building blocks of React applications.
-2. **JSX**: A syntax extension for JavaScript that looks similar to HTML.
-3. **Props**: How you pass data to components.
-4. **State**: How components manage and update their data.
-
-## Example Code
-
-\`\`\`jsx
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-\`\`\`
-
-React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes.
-  `,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        courseId: 'cs101',
-        courseName: 'Introduction to Computer Science',
-        tags: ['React', 'JavaScript', 'UI', 'UX']
+    } catch (error) {
+        console.error('Error fetching note:', error);
+        throw error;
     }
-
-    // Simulate not found for specific ID
-    if (id === 'not-found') {
-        return notFound()
-    }
-
-    return note
 }
 
 export default async function NotePage(props: { params: NotePageProps }) {
-    const userCookie = await getUserCookie();
     const { id } = await props.params;
-
-    const user = userCookie ? {
-        username: userCookie.username?.value || '',
-        email: userCookie.email?.value || ''
-    } : null;
+    const user = await getUser();
     
-
     // console.log(params)
     const note = await getNote(id)
     return (

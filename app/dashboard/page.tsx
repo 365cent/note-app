@@ -9,8 +9,9 @@ import { getUser } from '../libs/action';
 const icons = {
     courses: 'ri-book-line text-blue-500',
     notes: 'ri-booklet-line text-green-500',
-    university: 'ri-school-line text-red-500',
-    email: 'ri-mail-line text-purple-500'
+    university: 'ri-school-line text-purple-500',
+    email: 'ri-mail-line text-yellow-500',
+    course: 'ri-sticky-note-line text-blue-500'
 }
 
 interface User {
@@ -30,10 +31,10 @@ interface Note {
 const InfoCard = ({ title, value, icon }: { title: string; value: string | number; icon: string }) => {
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">
-            <div className="flex items-center justify-between">
-                <div>
+            <div className="flex items-center justify-between h-full">
+                <div className="flex flex-col justify-between h-full">
                     <p className="text-sm font-medium text-gray-500">{title}</p>
-                    <h3 className="text-2xl font-semibold mt-1 text-gray-900">{value}</h3>
+                    <h3 className={`font-semibold mt-1 text-gray-900 ${String(value).length > 10 ? 'text-md' : 'text-2xl'}`}>{value}</h3>
                 </div>
                 <div className="text-3xl"><i className={icon}></i></div>
             </div>
@@ -44,8 +45,11 @@ const InfoCard = ({ title, value, icon }: { title: string; value: string | numbe
 export default function NotePage() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [user, setUser] = useState<User | null>(null)
-    const [coursesCount, setCoursesCount] = useState<number>(0)
     const [noteCount, setNoteCount] = useState<number>(0)
+    const [userInfo, setUserInfo] = useState<{ username: string, email: string, university: string, course_ids: string[] } | null>(null)
+    const [courses, setCourses] = React.useState<{ [key: string]: { name: string, noteCount: number } }>({});
+
+
     React.useEffect(() => {
         async function fetchUser() {
             const userData = await getUser();
@@ -58,15 +62,64 @@ export default function NotePage() {
         fetch('https://dash.note.lat/api/getAUserNotes?email=' + user?.email)
             .then((response) => response.json())
             .then((data: { data: Note[] }) => {
-                console.log(data.data)
-                const uniqueCourses = new Set(data.data.map(note => note.course_name));
-                setCoursesCount(uniqueCourses.size);
                 setNoteCount(data.data.length)
             })
             .catch((error) => {
                 console.error('Error fetching notes:', error);
             });
     }, [user])
+
+    React.useEffect(() => {
+        if (!user?.email) return;
+
+        fetch('https://dash.note.lat/api/getUserInfo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: user.email
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log(data.user)
+                    setUserInfo({
+                        username: data.user.user_name,
+                        email: data.user.user_email,
+                        university: data.user.university_name,
+                        course_ids: data.user.course_ids
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user info:', error);
+            });
+    }, [user]);
+
+    React.useEffect(() => {
+        if (!userInfo?.course_ids || userInfo.course_ids.length === 0) return;
+
+        userInfo.course_ids.forEach(courseId => {
+            fetch(`https://dash.note.lat/api/getCourseNotes?course_id=${courseId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        setCourses(prev => ({
+                            ...prev,
+                            [courseId]: {
+                                name: data.data[0]?.course_name || 'Unknown Course',
+                                noteCount: data.data.length
+                            }
+                        }));
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error fetching course details for ${courseId}:`, error);
+                });
+        });
+    }, [userInfo?.course_ids]);
 
     const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen)
 
@@ -94,11 +147,17 @@ export default function NotePage() {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <InfoCard title="Courses" value={coursesCount} icon={icons.courses} />
+                            <InfoCard title="Courses" value={userInfo?.course_ids.length || 0} icon={icons.courses} />
                             <InfoCard title="Notes" value={noteCount} icon={icons.notes} />
-                            {/* <InfoCard title="Courses" value={userInfo?.coursesCount} icon={icons.courses} />
-                            <InfoCard title="University" value={userInfo?.university} icon={icons.university} />
-                            <InfoCard title="Email" value={userInfo?.email} icon={icons.email} /> */}
+                            <InfoCard title="University" value={userInfo?.university || 'Not set'} icon={icons.university} />
+                            <InfoCard title="Email" value={userInfo?.email || 'Not set'} icon={icons.email} />
+                        </div>
+                        <hr className="my-8" />
+                        <h2 className="mb-4 text-2xl font-semibold text-gray-800 dark:text-white">Courses</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {Object.entries(courses).map(([courseId, course]) => (
+                                <InfoCard key={courseId} title={course.name} value={course.noteCount} icon={icons.course} />
+                            ))}
                         </div>
                     </div>
                 </main>
