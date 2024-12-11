@@ -83,6 +83,9 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 #### Tagging Notes
 ![Tagging Notes](./screenshots/tagging.png)
 
+#### Search Notes
+![Search Notes](./screenshots/search.png)
+
 #### Note Details
 ![Note Details](./screenshots/note.png)
 
