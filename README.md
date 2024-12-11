@@ -104,9 +104,12 @@ git clone https://github.com/365cent/note-app
 npm install
 ```
 
-3. Configure environment variables
+3. Configure environment variables 
+
 (not required)
+
 4. Set up Neo4j database
+
 Visit [neo4j-backend](https://github.com/MSomnia/neo4j-backend) for more information.
 5. Run development server
 ```
