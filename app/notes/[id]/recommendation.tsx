@@ -3,9 +3,16 @@
 import { useState, useRef, useEffect } from 'react'
 import { Disclosure, DisclosureButton, DisclosurePanel, Button} from '@headlessui/react'
 
+interface Note {
+    note_id: string;
+    note_title: string;
+    note_content: string;
+    note_created_date: string;
+}
+
 interface Recommendation {
+    id: string;
     title: string;
-    id: number;
     description: string;
     date: string;
 }
@@ -19,8 +26,8 @@ const fetchRecommendations = async (noteId: string): Promise<Recommendation[]> =
             throw new Error(result.message);
         }
 
-        return result.data.map((note: any) => ({
-            id: Number(note.note_id),
+        return result.data.map((note: Note) => ({
+            id: note.note_id,
             title: note.note_title,
             description: note.note_content.substring(0, 100) + '...', // First 100 chars as preview
             date: note.note_created_date
