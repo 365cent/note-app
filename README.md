@@ -111,7 +111,23 @@ npm install
 4. Set up Neo4j database
 
 Visit [neo4j-backend](https://github.com/MSomnia/neo4j-backend) for more information.
+
 5. Run development server
 ```
 npm run dev
 ```
+
+## Credit
+This project is built with the help of the following resources:
+- [Neo4j](https://neo4j.com/)
+- [OpenAI Whisper](https://github.com/openai/whisper)
+- [LLaMA](https://github.com/facebookresearch/llama)
+- [Next.js](https://nextjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React](https://reactjs.org/)
+- [Cloudflare](https://www.cloudflare.com/)
+- [Vercel](https://vercel.com/)
+
+Special thanks to:
+- [MSomnia](https://github.com/MSomnia) for developing the Neo4j backend
+- [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) for providing free credits for AI transcription and text generation
