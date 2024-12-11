@@ -16,6 +16,8 @@ interface Note {
     note_tags: string[];
 }
 
+
+
 export async function fetchUniversityList() {
     const response = await fetch('https://dash.note.lat/api/getAllUni', {
         method: 'GET'
@@ -129,8 +131,7 @@ export async function createNote(data: Note) {
         body: JSON.stringify(data), // Use the passed `data` directly
     });
 
-    console.log(data);
-
     const json = await response.json();
+    console.log(json);
     return json.data; // Return the relevant part of the response
 }
