@@ -4,11 +4,16 @@ import React, { useState, useEffect } from 'react'
 import { Button, Switch, Combobox, Listbox, ListboxOptions, ListboxOption, Label, ListboxButton } from '@headlessui/react'
 import Sidebar from "../components/sidebar"
 import Header from "../components/header"
-import { getUser } from "../libs/action";
+import { getUser, fetchUniversityList } from "../libs/action";
 
 interface User {
   username: string,
   email: string
+}
+
+interface University {
+  domain: string,
+  name: string
 }
 
 const classes = [
@@ -26,7 +31,8 @@ export default function Settings() {
   const [darkMode, setDarkMode] = React.useState(false)
   const [emailNotifications, setEmailNotifications] = React.useState(true)
   const [autoSave, setAutoSave] = React.useState(true)
-  const [university, setUniversity] = React.useState('')
+  const [university, setUniversity] = React.useState<University | null>(null)
+  const [universities, setUniversities] = React.useState<University[]>([])
   const [major, setMajor] = React.useState('')
   const [selectedClasses, setSelectedClasses] = React.useState<{ id: number; name: string }[]>([])
   const [query, setQuery] = React.useState('')
@@ -40,6 +46,21 @@ export default function Settings() {
     };
     fetchUser();
   }, []);
+
+  useEffect(() => {
+    const fetchUniversities = async () => {
+      const data = await fetchUniversityList();
+      setUniversities(data);
+    };
+    fetchUniversities();
+  }, []);
+
+  const filteredUniversities =
+    query === ''
+      ? universities
+      : universities.filter((university) => {
+          return university.name.toLowerCase().includes(query.toLowerCase())
+        })
 
   const filteredClasses =
     query === ''
@@ -111,45 +132,62 @@ export default function Settings() {
             <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Academic Information</h2>
               <form className="space-y-4">
-                <div>
-                  <Listbox value={university} onChange={setUniversity}>
+                <div className="relative z-50">
+                  <Combobox value={university} onChange={setUniversity}>
                     <Label className="block text-sm font-medium text-gray-700 dark:text-gray-200">University Name</Label>
                     <div className="relative mt-1">
-                      <ListboxButton className="relative w-full cursor-default rounded-lg bg-white dark:bg-gray-700 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-blue-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-300 sm:text-sm">
-                        <span className="block truncate">{university || 'Select your university'}</span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white dark:bg-gray-700 text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+                        <Combobox.Input
+                          className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 dark:text-white focus:ring-0"
+                          displayValue={(uni: University | null) => uni?.name || ''}
+                          onChange={(event) => setQuery(event.target.value)}
+                          placeholder="Select your university"
+                        />
+                        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
                           <i className="ri-arrow-down-s-line h-5 w-5 text-gray-400" aria-hidden="true" />
-                        </span>
-                      </ListboxButton>
-                      <ListboxOptions className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {['University A', 'University B', 'University C'].map((uni) => (
-                          <ListboxOption
-                            key={uni}
-                            className={({ focus }) =>
-                              `relative cursor-default select-none py-2 pl-10 pr-4 ${focus ? 'bg-blue-100 text-blue-900' : 'text-gray-900 dark:text-white'
-                              }`
-                            }
-                            value={uni}
-                          >
-                            {({ selected }) => (
-                              <>
-                                <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                                  {uni}
-                                </span>
-                                {selected ? (
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                    <i className="ri-check-line h-5 w-5" aria-hidden="true" />
+                        </Combobox.Button>
+                      </div>
+                      <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {filteredUniversities.length === 0 && query !== '' ? (
+                          <div className="relative cursor-default select-none py-2 px-4 text-gray-700 dark:text-gray-300">
+                            Nothing found.
+                          </div>
+                        ) : (
+                          filteredUniversities.map((uni) => (
+                            <Combobox.Option
+                              key={uni.domain}
+                              className={({ active }) =>
+                                `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-800' : 'text-gray-900 dark:text-white'
+                                }`
+                              }
+                              value={uni}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <span
+                                    className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                                      }`}
+                                  >
+                                    {uni.name}
                                   </span>
-                                ) : null}
-                              </>
-                            )}
-                          </ListboxOption>
-                        ))}
-                      </ListboxOptions>
+                                  {selected ? (
+                                    <span
+                                      className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active ? 'text-white' : 'text-blue-600'
+                                        }`}
+                                    >
+                                      <i className="ri-check-line h-5 w-5" aria-hidden="true" />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Combobox.Option>
+                          ))
+                        )}
+                      </Combobox.Options>
                     </div>
-                  </Listbox>
+                  </Combobox>
                 </div>
-                <div>
+                <div className="relative z-40">
                   <Listbox value={major} onChange={setMajor}>
                     <Listbox.Label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Major</Listbox.Label>
                     <div className="relative mt-1">
@@ -187,7 +225,7 @@ export default function Settings() {
                     </div>
                   </Listbox>
                 </div>
-                <div>
+                <div className="relative z-30">
                   <label htmlFor="classes" className="block text-sm font-medium text-gray-700 dark:text-gray-200">Classes</label>
                   <Combobox value={selectedClasses} onChange={setSelectedClasses} multiple>
                     <div className="relative mt-1">
@@ -203,7 +241,7 @@ export default function Settings() {
                           <i className="ri-arrow-down-s-line h-5 w-5 text-gray-400" aria-hidden="true" />
                         </Combobox.Button>
                       </div>
-                      <Combobox.Options className="absolute mt-1 max-h-60 w-full z-10 overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {filteredClasses.length === 0 && query !== '' ? (
                           <div className="relative cursor-default select-none py-2 px-4 text-gray-700 dark:text-gray-300">
                             Nothing found.
