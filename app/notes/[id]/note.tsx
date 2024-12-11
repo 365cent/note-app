@@ -3,14 +3,17 @@
 import React from 'react'
 import Header from '../../components/header'
 import Sidebar from '../../components/sidebar'
+import Recommendation from './recommendation'
 import ReactMarkdown from 'react-markdown'
 
 interface NoteProps {
   note: {
+    id: string
     title: string
     content: string
     createdAt: string
     updatedAt: string
+    courseId?: string
     courseName?: string
     tags: string[]
   }
@@ -119,7 +122,7 @@ export default function Note({ note, user }: NoteProps) {
               </ReactMarkdown>
             </div>
 
-            <div className="mt-8 pt-8 border-t">
+            <div className="my-8 pt-8 border-t">
               <div className="flex items-center justify-between">
                 <div className="text-sm text-gray-500">
                   Last updated: {new Date(note.updatedAt).toLocaleDateString()}
@@ -134,6 +137,8 @@ export default function Note({ note, user }: NoteProps) {
                 </div>
               </div>
             </div>
+
+          <Recommendation noteId={note.id} />
           </div>
         </main>
       </div>
