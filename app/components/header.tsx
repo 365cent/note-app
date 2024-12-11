@@ -26,7 +26,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
             if (!userData) {
                 const timer = setTimeout(() => {
                     router.push('/login?status=unauthorized');
-                }, 3000);
+                }, 1000);
                 return () => clearTimeout(timer);
             }
         }

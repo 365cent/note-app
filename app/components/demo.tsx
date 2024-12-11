@@ -86,7 +86,24 @@ Transcript:`;
             value={noteData}
             onChange={e => setNoteData(e.target.value)}
             rows={6} />
-          <div className="grid">
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(noteData);
+                const button = document.getElementById('copyButton');
+                if (button) {
+                  button.textContent = 'Copied';
+                  setTimeout(() => {
+                    button.textContent = 'Copy Text';
+                  }, 3000);
+                }
+              }}
+              id="copyButton"
+              className="mr-auto inline-flex items-center gap-2 rounded-md bg-gray-200 py-1.5 px-3 text-sm/6 font-semibold text-gray-700 shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-300 data-[open]:bg-gray-200 data-[focus]:outline-1 data-[focus]:outline-white"
+              type="button"
+            >
+              Copy Text
+            </Button>
             <Button className="ml-auto inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white"
               type="submit">
               Create Note
