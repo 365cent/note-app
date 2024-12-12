@@ -26,6 +26,47 @@ Note.lat is an intelligent note-taking platform that leverages cutting-edge AI t
 - Fast search and retrieval capabilities
 - Scalable data architecture
 
+### Project Structure
+```mermaid
+graph TD
+    Root[📁 note-app]
+    Root --> App[📱 app]
+    Root --> Public[📂 public]
+    Root --> Screenshots[📸 screenshots]
+    Root --> Config[⚙️ config files]
+
+    App --> Components[🧩 components]
+    App --> Pages[📄 pages]
+    App --> Libs[🛠️ libs]
+    App --> Fonts[🔤 fonts]
+    App --> Styles[🎨 globals.css]
+
+    Components --> C1[header.tsx]
+    Components --> C2[recording.tsx]
+    Components --> C3[sidebar.tsx]
+    Components --> C4[demo.tsx]
+
+    Pages --> P1[📝 create]
+    Pages --> P2[🏠 dashboard]
+    Pages --> P3[🔐 login]
+    Pages --> P4[📋 notes]
+    Pages --> P5[⚙️ settings]
+    Pages --> P6[📝 signup]
+    Pages --> P7[↪️ logout]
+
+    Public --> Assets[🖼️ assets]
+    Public --> Icons[📍 icons]
+
+    Notes[📝 notes] --> N1[note.tsx]
+    Notes --> N2[recommendation.tsx]
+    Notes --> N3[notes.tsx]
+
+    Config --> CF1[package.json]
+    Config --> CF2[tsconfig.json]
+    Config --> CF3[tailwind.config.ts]
+    Config --> CF4[postcss.config.mjs]
+```
+
 ## Screenshots
 ### Home
 ![Home](./screenshots/home.png)
